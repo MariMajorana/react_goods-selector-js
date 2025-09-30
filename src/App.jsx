@@ -17,6 +17,13 @@ export const goods = [
 
 export const App = () => {
   const [selectedGood, setGood] = useState('Jam');
+  const handleClear = () => {
+    setGood('');
+  };
+
+  const handleSelected = good => {
+    setGood(good);
+  };
 
   return (
     <main className="section container">
@@ -27,52 +34,58 @@ export const App = () => {
             data-cy="ClearButton"
             type="button"
             className="delete ml-3"
-            onClick={() => setGood('')}
+            onClick={handleClear}
           />
         )}
       </h1>
 
       <table className="table">
         <tbody>
-          {goods.map(good => (
-            <tr
-              data-cy="Good"
-              key={good}
-              className={
-                selectedGood === good ? 'has-background-success-light' : ''
-              }
-            >
-              <td>
-                {selectedGood === good ? (
-                  <button
-                    data-cy="RemoveButton"
-                    type="button"
-                    className="button is-info"
-                    onClick={() => {
-                      setGood(null);
-                    }}
-                  >
-                    -
-                  </button>
-                ) : (
-                  <button
-                    data-cy="AddButton"
-                    type="button"
-                    className="button"
-                    onClick={() => {
-                      setGood(good);
-                    }}
-                  >
-                    +
-                  </button>
-                )}
-              </td>
+          {goods.map(good => {
+            const isSelected = selectedGood === good;
 
-              <td data-cy="GoodTitle" className="is-vcentered">
-                {good}
-              </td>
-            </tr>
-          ))}
+            const shouldShowAdd = selectedGood === '';
+            const shouldShowRemove = isSelected && selectedGood !== '';
+
+            return (
+              <tr
+                data-cy="Good"
+                key={good}
+                className={
+                  selectedGood === good ? 'has-background-success-light' : ''
+                }
+              >
+                <td>
+                  {shouldShowRemove && (
+                    <button
+                      data-cy="RemoveButton"
+                      type="button"
+                      className="button is-info"
+                      onClick={handleClear}
+                    >
+                      -
+                    </button>
+                  )}
+
+                  {!shouldShowRemove && shouldShowAdd && (
+                    <button
+                      data-cy="AddButton"
+                      type="button"
+                      className="button"
+                      data-good={good}
+                      onClick={() => handleSelected(good)}
+                    >
+                      +
+                    </button>
+                  )}
+                </td>
+
+                <td data-cy="GoodTitle" className="is-vcentered">
+                  {good}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </main>
