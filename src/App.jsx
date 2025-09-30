@@ -44,7 +44,7 @@ export const App = () => {
           {goods.map(good => {
             const isSelected = selectedGood === good;
 
-            const shouldShowAdd = selectedGood === '';
+            const shouldShowAdd = !isSelected;
             const shouldShowRemove = isSelected && selectedGood !== '';
 
             return (
